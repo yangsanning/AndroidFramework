@@ -1,12 +1,11 @@
 package ysn.com.androidframework.network;
 
-import android.util.Log;
-
 import com.blankj.utilcode.util.NetworkUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lazy.library.logging.Logcat;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -17,12 +16,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ysn.com.androidframework.constant.Constant;
 import ysn.com.androidframework.constant.UrlConstant;
+import ysn.com.androidframework.network.typeadapter.DoubleTypeAdapter;
+import ysn.com.androidframework.network.typeadapter.FloatTypeAdapter;
+import ysn.com.androidframework.network.typeadapter.IntegerTypeAdapter;
+import ysn.com.androidframework.network.typeadapter.LongTypeAdapter;
 
 /**
  * 网络组建初始化
@@ -52,7 +54,7 @@ public class NetworkClient {
     private NetworkClient() {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(buildPreventRubbishBackendGson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(UrlConstant.API_HOME)
                 .build();
@@ -72,6 +74,22 @@ public class NetworkClient {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .build();
+    }
+
+    /**
+     * 防止Rubbish Backend的TypeAdapter
+     */
+    private Gson buildPreventRubbishBackendGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(Integer.class, new IntegerTypeAdapter())
+                .registerTypeAdapter(int.class, new IntegerTypeAdapter())
+                .registerTypeAdapter(Double.class, new DoubleTypeAdapter())
+                .registerTypeAdapter(double.class, new DoubleTypeAdapter())
+                .registerTypeAdapter(Long.class, new LongTypeAdapter())
+                .registerTypeAdapter(long.class, new LongTypeAdapter())
+                .registerTypeAdapter(Float.class, new FloatTypeAdapter())
+                .registerTypeAdapter(float.class, new FloatTypeAdapter())
+                .create();
     }
 
     /**
