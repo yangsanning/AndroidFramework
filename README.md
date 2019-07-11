@@ -104,5 +104,77 @@
     };
 ```
 
+---
+
+## [依赖统一管理configs.gradle]
+
+```android
+ext {
+    version = [
+            minSdkVersion    : 19,
+            compileSdkVersion: 27,
+            targetSdkVersion : 27,
+            versionCode      : 10000,
+            versionName      : "1.0.0",
+    ]
+
+    dependVersion = [
+            support_version: "27.1.1",
+            retrofit       : "2.4.0",
+            rxJava         : "2.1.12",
+            rxAndroid      : "2.0.2",
+            rxLife         : "1.0",
+            butterknife    : "8.5.1",
+    ]
+
+    supportLib = [
+            v7               : "com.android.support:appcompat-v7:$dependVersion.support_version",
+            design           : "com.android.support:design:$dependVersion.support_version",
+            cardview         : "com.android.support:cardview-v7:$dependVersion.support_version",
+            constraint_layout: "com.android.support.constraint:constraint-layout:1.1.0",
+    ]
+
+    retrofitLib = [
+            retrofit       : "com.squareup.retrofit2:retrofit:$dependVersion.retrofit",
+            retrofit_gson  : "com.squareup.retrofit2:converter-gson:$dependVersion.retrofit",
+            retrofit_rxjava: "com.squareup.retrofit2:adapter-rxjava:$dependVersion.retrofit",
+            retrofit_log   : "com.squareup.okhttp3:logging-interceptor:3.10.0",
+    ]
+
+    rxJavaLib = [
+            rxJava       : "io.reactivex.rxjava2:rxjava:$dependVersion.rxJava",
+            rxAndroid    : "io.reactivex.rxjava2:rxandroid:$dependVersion.rxAndroid",
+            rxLife       : "com.trello:rxlifecycle:$dependVersion.rxLife",
+            rxLife_common: "com.trello:rxlifecycle-components:$dependVersion.rxLife",
+    ]
+
+    butterknifeLib = [
+            butterknife: "com.jakewharton:butterknife:$dependVersion.butterknife",
+    ]
+    butterknifeCompiler = "com.jakewharton:butterknife-compiler:$dependVersion.butterknife"
+
+    supportLibs = supportLib.values()
+    retrofitLibs = retrofitLib.values()
+    rxJavaLibs = rxJavaLib.values()
+    butterknifeLibs = butterknifeLib.values()
+}
+```
+
+#### 在需要引用的地方引入对应的Libs
+``` android
+    // Retrofit
+    implementation rootProject.ext.retrofitLibs
+
+    // RxJava
+    implementation rootProject.ext.rxJavaLibs
+
+    // ButterKnife注解
+    implementation rootProject.ext.butterknifeLibs
+    annotationProcessor rootProject.ext.butterknifeCompiler
+``
+
+
 [网络组件NetworkClient]: https://github.com/yangsanning/AndroidFramework/blob/master/app/src/main/java/ysn/com/androidframework/network/NetworkClient.java
+
+[依赖统一管理configs.gradle]:https://github.com/yangsanning/AndroidFramework/blob/master/configs.gradle
 
