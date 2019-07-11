@@ -161,6 +161,7 @@ ext {
 ```
 
 #### 在需要引用的地方引入对应的Libs
+
 ``` android
     // Retrofit
     implementation rootProject.ext.retrofitLibs
@@ -171,7 +172,7 @@ ext {
     // ButterKnife注解
     implementation rootProject.ext.butterknifeLibs
     annotationProcessor rootProject.ext.butterknifeCompiler
-``
+```
 
 
 [网络组件NetworkClient]: https://github.com/yangsanning/AndroidFramework/blob/master/app/src/main/java/ysn/com/androidframework/network/NetworkClient.java
