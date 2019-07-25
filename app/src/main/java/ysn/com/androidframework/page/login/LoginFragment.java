@@ -70,7 +70,6 @@ public class LoginFragment extends BaseMvpFragment<LoginPresenter> implements Lo
     @Override
     public void loginSuccess() {
         startActivity(MainActivity.class);
-        finishActivity();
     }
 
     @Override
