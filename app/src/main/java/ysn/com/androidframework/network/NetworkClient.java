@@ -64,27 +64,26 @@ public class NetworkClient {
 
     private NetworkClient() {
         Retrofit retrofit = new Retrofit.Builder()
-                .client(getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(buildPreventRubbishBackendGson()))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(UrlConstant.API_HOME)
-                .build();
+            .client(getOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(buildPreventRubbishBackendGson()))
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .baseUrl(UrlConstant.API_HOME)
+            .build();
         mService = retrofit.create(NetworkApiService.class);
     }
 
     private static OkHttpClient getOkHttpClient() {
         Cache cache = new Cache(new File("", "HttpCache"), 1024 * 1024 * 10);
         return new OkHttpClient.Builder()
-                .cache(cache)
-                .addInterceptor(rewriteCacheControlInterceptor)
-                .addInterceptor(loggingInterceptor)
-//                .addNetworkInterceptor(new HttpLoggingInterceptor(Logcat::d)
-//                        .setLevel(HttpLoggingInterceptor.Level.BODY))
-                .retryOnConnectionFailure(true)
-                .readTimeout(20, TimeUnit.SECONDS)
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .build();
+            .cache(cache)
+            .addInterceptor(new NetworkInterceptor())
+            .addInterceptor(rewriteCacheControlInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .retryOnConnectionFailure(true)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
+            .build();
     }
 
     /**
@@ -92,15 +91,15 @@ public class NetworkClient {
      */
     private Gson buildPreventRubbishBackendGson() {
         return new GsonBuilder()
-                .registerTypeAdapter(Integer.class, new IntegerTypeAdapter())
-                .registerTypeAdapter(int.class, new IntegerTypeAdapter())
-                .registerTypeAdapter(Double.class, new DoubleTypeAdapter())
-                .registerTypeAdapter(double.class, new DoubleTypeAdapter())
-                .registerTypeAdapter(Long.class, new LongTypeAdapter())
-                .registerTypeAdapter(long.class, new LongTypeAdapter())
-                .registerTypeAdapter(Float.class, new FloatTypeAdapter())
-                .registerTypeAdapter(float.class, new FloatTypeAdapter())
-                .create();
+            .registerTypeAdapter(Integer.class, new IntegerTypeAdapter())
+            .registerTypeAdapter(int.class, new IntegerTypeAdapter())
+            .registerTypeAdapter(Double.class, new DoubleTypeAdapter())
+            .registerTypeAdapter(double.class, new DoubleTypeAdapter())
+            .registerTypeAdapter(Long.class, new LongTypeAdapter())
+            .registerTypeAdapter(long.class, new LongTypeAdapter())
+            .registerTypeAdapter(Float.class, new FloatTypeAdapter())
+            .registerTypeAdapter(float.class, new FloatTypeAdapter())
+            .create();
     }
 
     /**
@@ -111,22 +110,22 @@ public class NetworkClient {
         Request request = chain.request();
         if (!NetworkUtils.isConnected()) {
             request = request.newBuilder()
-                    .cacheControl(CacheControl.FORCE_CACHE)
-                    .build();
+                .cacheControl(CacheControl.FORCE_CACHE)
+                .build();
         }
         Response originalResponse = chain.proceed(request);
         if (NetworkUtils.isConnected()) {
             //有网的时候读接口上的@Headers里的配置，可以在这里进行统一的设置
             String cacheControl = request.cacheControl().toString();
             return originalResponse.newBuilder()
-                    .header("Cache-Control", cacheControl)
-                    .removeHeader("Pragma")
-                    .build();
+                .header("Cache-Control", cacheControl)
+                .removeHeader("Pragma")
+                .build();
         } else {
             return originalResponse.newBuilder()
-                    .header("Cache-Control", "public, only-if-cached, max-stale=" + CACHE_CONTROL_CACHE)
-                    .removeHeader("Pragma")
-                    .build();
+                .header("Cache-Control", "public, only-if-cached, max-stale=" + CACHE_CONTROL_CACHE)
+                .removeHeader("Pragma")
+                .build();
         }
     };
 
