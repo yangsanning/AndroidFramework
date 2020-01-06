@@ -15,9 +15,4 @@ public final class UrlConstant {
      * 正式环境
      */
     public static final String API_HOME = "https://www.wanandroid.com";
-
-    /**
-     * 登陆
-     */
-    public static final String URL_LOGIN = "/user/login";
 }
