@@ -1,16 +1,22 @@
 package ysn.com.androidframework.network;
 
+import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
+import ysn.com.androidframework.model.bean.FileResult;
 import ysn.com.androidframework.model.bean.User;
+import ysn.com.androidframework.network.request.FileNetworkRequest;
 
 /**
  * api接口
@@ -48,4 +54,15 @@ public interface NetworkApiService {
      */
     @GET("ysn")
     Observable<NetworkResult<String>> getYsn(@QueryMap Map<String, Object> map);
+
+
+    /** 文件
+     * @see FileNetworkRequest *****************************************/
+
+    /**
+     * 上传文件
+     */
+    @Multipart
+    @POST("ysn")
+    Observable<NetworkResult<FileResult>> fileUpLoad(@Part List<MultipartBody.Part> partList);
 }
