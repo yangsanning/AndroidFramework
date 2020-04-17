@@ -28,6 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import ysn.com.androidframework.BuildConfig;
 import ysn.com.androidframework.constant.Constant;
 import ysn.com.androidframework.constant.UrlConstant;
+import ysn.com.androidframework.network.interceptor.BaseUrlInterceptor;
+import ysn.com.androidframework.network.interceptor.NetworkInterceptor;
 import ysn.com.androidframework.network.typeadapter.DoubleTypeAdapter;
 import ysn.com.androidframework.network.typeadapter.FloatTypeAdapter;
 import ysn.com.androidframework.network.typeadapter.IntegerTypeAdapter;
@@ -77,6 +79,7 @@ public class NetworkClient {
         return new OkHttpClient.Builder()
             .cache(cache)
             .addInterceptor(new NetworkInterceptor())
+            .addInterceptor(new BaseUrlInterceptor())
             .addInterceptor(rewriteCacheControlInterceptor)
             .addInterceptor(loggingInterceptor)
             .retryOnConnectionFailure(true)

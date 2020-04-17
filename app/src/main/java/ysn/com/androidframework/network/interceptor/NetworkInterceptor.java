@@ -1,4 +1,4 @@
-package ysn.com.androidframework.network;
+package ysn.com.androidframework.network.interceptor;
 
 import java.io.IOException;
 
@@ -18,18 +18,18 @@ public class NetworkInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request original = chain.request();
+        Request oldRequest = chain.request();
         //添加请求参数
-        HttpUrl url = original.url().newBuilder()
+        HttpUrl url = oldRequest.url().newBuilder()
             .addQueryParameter("token", "token")
             .build();
 
         //添加请求头
-        Request request = original.newBuilder()
+        Request request = oldRequest.newBuilder()
             .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
             .addHeader("Connection", "keep-alive")
             .addHeader("token", "token")
-            .method(original.method(), original.body())
+            .method(oldRequest.method(), oldRequest.body())
             .url(url)
             .build();
         return chain.proceed(request);
