@@ -33,7 +33,7 @@ public class LoginNetworkRequest extends BaseNetworkRequest {
      */
     public void login(@Required String username, @Required String password, @Required Subscriber<User> subscribers) {
         Observable<User> observable = NetworkClient.getInstance().mService
-                .login("https://www.baidu.com/", username, password)
+                .login(username, password)
                 .delay(UrlConstant.DELAY_SUBSCRIBERS_MILLIS_SHORT, TimeUnit.MILLISECONDS)
                 .map(new NetworkResultFun<>());
         toSubscribe(observable, subscribers);

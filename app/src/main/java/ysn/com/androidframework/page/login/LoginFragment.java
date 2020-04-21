@@ -26,7 +26,7 @@ public class LoginFragment extends BaseMvpFragment<LoginPresenter> implements Lo
 
     @OnClick(R.id.login_fragment_login_bt)
     public void login(View v) {
-        mPresenter.login(usernameEt.getText().toString().trim(), passwordEt.getText().toString().trim());
+        mPresenter.getArticleList(usernameEt.getText().toString().trim(), passwordEt.getText().toString().trim());
     }
 
     @OnClick(R.id.login_fragment_show_password_iv)

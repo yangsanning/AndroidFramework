@@ -16,5 +16,6 @@ public interface LoginContract {
 
         void login(@Required String username, @Required String password);
 
+        void getArticleList(@Required String username, @Required String password);
     }
 }

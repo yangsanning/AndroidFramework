@@ -15,6 +15,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
+import ysn.com.androidframework.model.bean.Article;
 import ysn.com.androidframework.model.bean.FileResult;
 import ysn.com.androidframework.model.bean.User;
 import ysn.com.androidframework.network.interceptor.BaseUrlInterceptor;
@@ -43,6 +44,16 @@ public interface NetworkApiService {
     @POST("/user/login")
     Observable<NetworkResult<User>> login(@Header(BaseUrlInterceptor.BASE_URL) String baseUrl,
                                           @Field("username") String phone, @Field("password") String password);
+
+    /**
+     * 按照作者昵称搜索文章
+     *
+     * @param page   页码
+     * @param author 作者名字
+     * @return 搜索文章
+     */
+    @GET("/article/list/{page}/json")
+    Observable<NetworkResult<Article>> getArticleList(@Path("page") int page, @Query("author") String author);
 
     /**
      * 链接含有可变参数
