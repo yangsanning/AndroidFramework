@@ -1,5 +1,9 @@
 package ysn.com.androidframework.model.bean;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.List;
 
 /**
@@ -9,6 +13,7 @@ import java.util.List;
  * @Date 2018/6/10
  * @History 2018/6/10 author: description:
  */
+@Entity
 public class User {
 
     /**
@@ -26,17 +31,21 @@ public class User {
      * username : 582959883
      */
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private boolean admin;
     private String email;
     private String icon;
-    private int id;
     private String nickname;
     private String password;
     private String publicName;
     private String token;
     private int type;
     private String username;
+
+    @Ignore
     private List<?> chapterTops;
+    @Ignore
     private List<?> collectIds;
 
     public boolean isAdmin() {
